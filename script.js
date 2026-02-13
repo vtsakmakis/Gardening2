@@ -1031,3 +1031,4 @@ document.querySelectorAll('.about-timeline__item').forEach(item => {
   });
 })();
 
+
