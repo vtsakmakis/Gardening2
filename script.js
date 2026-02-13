@@ -190,8 +190,14 @@
   // Cache for already processed elements to avoid redundant work
   const processedElements = new WeakSet();
   
+  // Mobile index: skip scroll animations for services & projects - they load slowly otherwise
+  const skipIndexMobileAnimations = () => 
+    document.body.classList.contains('index-page') && isMobile();
+  
   // Function to add animation classes to elements
   function addScrollAnimations() {
+    const skipServicesProjects = skipIndexMobileAnimations();
+    
     // Sections - fade up (exclude hero sections - they should be visible immediately)
     const sections = document.querySelectorAll(
       'section:not(.hero):not(.entrance-animation):not(.services-hero-premium), ' +
@@ -205,6 +211,7 @@
     );
     
     sections.forEach((section) => {
+      if (skipServicesProjects && (section.classList.contains('services') || section.classList.contains('projects'))) return;
       if (!processedElements.has(section) && !section.classList.contains('scroll-animate-up')) {
         section.classList.add('scroll-animate-up');
         animationObserver.observe(section);
@@ -220,6 +227,9 @@
     );
     
     cardContainers.forEach(container => {
+      const isServicesOrProjects = container.classList.contains('services__grid') || container.classList.contains('projects__grid');
+      if (skipServicesProjects && isServicesOrProjects) return;
+      
       const cards = container.querySelectorAll(
         '.service-card, .project-card, .testimonial-card, ' +
         '.service-premium-item, .process-step, .about-value-mosaic'
@@ -254,6 +264,7 @@
     
     headerSelectors.forEach(selector => {
       document.querySelectorAll(selector).forEach((header) => {
+        if (skipServicesProjects && (header.classList.contains('services__header') || header.classList.contains('projects__header'))) return;
         if (!processedElements.has(header) && !header.classList.contains('scroll-animate-up')) {
           header.classList.add('scroll-animate-up');
           animationObserver.observe(header);
@@ -323,41 +334,6 @@
     initScrollAnimations();
   }
 })();
-
-// Back to Top Button - Optimized for performance
-(function() {
-  const button = document.createElement('button');
-  button.className = 'back-to-top';
-  button.setAttribute('aria-label', 'Back to top');
-  button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>';
-  document.body.appendChild(button);
-
-  button.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  // Throttled scroll handler for better performance
-  let scrollTicking = false;
-  let isVisible = false;
-  window.addEventListener('scroll', () => {
-    if (!scrollTicking) {
-      window.requestAnimationFrame(() => {
-        const shouldShow = window.pageYOffset > 300;
-        if (shouldShow !== isVisible) {
-          isVisible = shouldShow;
-          if (shouldShow) {
-            button.classList.add('show');
-          } else {
-            button.classList.remove('show');
-          }
-        }
-        scrollTicking = false;
-      });
-      scrollTicking = true;
-    }
-  }, { passive: true });
-})();
-
 
 // Entrance Animation (only for index.html)
 (function() {
@@ -1003,32 +979,5 @@ document.querySelectorAll('.about-timeline__item').forEach(item => {
   }, CACHE_DURATION);
 })();
 
-// ============================================
-// BACK TO TOP BUTTON
-// ============================================
-(function() {
-  const scrollThreshold = 300;
-
-  function toggleButton() {
-    const btn = document.getElementById('back-to-top');
-    if (!btn) return;
-    if (window.scrollY > scrollThreshold) {
-      btn.classList.add('back-to-top--visible');
-    } else {
-      btn.classList.remove('back-to-top--visible');
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('back-to-top');
-    if (!btn) return;
-    btn.addEventListener('click', function() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    window.addEventListener('scroll', toggleButton, { passive: true });
-    toggleButton();
-    setTimeout(toggleButton, 500);
-  });
-})();
 
 
