@@ -1489,53 +1489,6 @@ body.site-revealed .services {
   }
 }
 
-/* ============================================
-   BACK TO TOP BUTTON
-   ============================================ */
-
-.back-to-top {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 50px;
-  height: 50px;
-  background: #6b8e6b;
-  border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 9999;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.back-to-top.show {
-  opacity: 1;
-}
-
-.back-to-top:hover {
-  background: #8fb38f;
-  transform: translateY(-2px);
-}
-
-.back-to-top svg {
-  width: 24px;
-  height: 24px;
-  color: white;
-}
-
-@media (max-width: 768px) {
-  .back-to-top {
-    bottom: 20px;
-    right: 20px;
-    width: 45px;
-    height: 45px;
-  }
-}
-
 .service-card::before {
   content: "";
   position: absolute;
@@ -3031,8 +2984,6 @@ body.site-revealed .weather-widget-section {
   letter-spacing: 0.05em;
   grid-column: 1 / -1;
 }
-
-/* Back to Top Button */
 
 /* ============================================
    ABOUT PAGE
@@ -7506,56 +7457,5 @@ section:not(.hero):not(.entrance-animation)::before {
 .service-card:hover .service-card__icon-wrapper::after {
   opacity: 0.2;
   transform: translate(-50%, -50%) scale(1.2);
-}
-
-/* ============================================
-   BACK TO TOP BUTTON
-   ============================================ */
-.back-to-top {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-green-dark, #4a7c59) 0%, var(--accent-green, #6b8e6b) 100%);
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(74, 124, 89, 0.4);
-  z-index: 10001;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, visibility 0.3s ease;
-}
-
-.back-to-top--visible {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-.back-to-top:hover {
-  box-shadow: 0 6px 24px rgba(74, 124, 89, 0.5);
-  transform: translateY(-2px);
-}
-
-.back-to-top:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 768px) {
-  .back-to-top {
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 44px;
-    height: 44px;
-  }
 }
 
