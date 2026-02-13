@@ -938,6 +938,16 @@ body {
   will-change: opacity, transform;
 }
 
+/* Mobile: use scroll instead of fixed - fixed causes severe scroll lag on all devices */
+@media (max-width: 768px) {
+  .hero,
+  .about-hero,
+  .contact-split__left,
+  .services-cta {
+    background-attachment: scroll;
+  }
+}
+
 /* Staggered reveal after entrance animation */
 body.site-revealed .hero {
   opacity: 1;
@@ -7548,3 +7558,4 @@ section:not(.hero):not(.entrance-animation)::before {
     height: 44px;
   }
 }
+
