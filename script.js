@@ -173,8 +173,8 @@
 (function() {
   const isMobile = () => window.innerWidth <= 768;
   const animationObserverOptions = {
-    threshold: isMobile() ? 0.05 : 0.12,
-    rootMargin: isMobile() ? '0px 0px -30px 0px' : '0px 0px -80px 0px'
+    threshold: isMobile() ? 0.02 : 0.05,
+    rootMargin: isMobile() ? '0px 0px 80px 0px' : '0px 0px 60px 0px'
   };
 
   // Animate once - unobserve after first intersection (smoother, less lag)
@@ -1030,3 +1030,4 @@ document.querySelectorAll('.about-timeline__item').forEach(item => {
     setTimeout(toggleButton, 500);
   });
 })();
+
