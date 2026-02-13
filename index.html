@@ -273,6 +273,7 @@
     </script>
     
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="preload" href="images/gazony_poradnik-2_781.jpg" as="image" />
   </head>
   <body class="index-page">
     <!-- Entrance Animation Overlay -->
@@ -590,7 +591,7 @@
         <div class="projects__grid">
           <div class="project-card">
             <div class="project-card__image">
-              <img src="images/gazony_poradnik-2_781.jpg" alt="Σύγχρονος Κήπος Ανάπαυσης" loading="lazy" />
+              <img src="images/gazony_poradnik-2_781.jpg" alt="Σύγχρονος Κήπος Ανάπαυσης" loading="eager" fetchpriority="high" />
               <div class="project-card__overlay"></div>
             </div>
             <div class="project-card__content">
@@ -775,9 +776,6 @@
         <p class="footer__copyright">© 2024 The Gardeners. Όλα τα δικαιώματα διατηρούνται.</p>
       </div>
     </footer>
-    <button class="back-to-top" id="back-to-top" aria-label="Επιστροφή στην κορυφή" title="Επιστροφή στην κορυφή">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
-    </button>
     <script src="./script.js"></script>
   </body>
 </html>
