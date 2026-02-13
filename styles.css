@@ -4154,6 +4154,20 @@ body.site-revealed .weather-widget-section {
     transition: none !important;
   }
 
+  /* Index mobile: skip sectionReveal animation delays - show services & projects immediately */
+  body.index-page.site-revealed .services,
+  body.index-page.site-revealed .projects {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Index mobile: simplify services::after gradient for faster paint */
+  body.index-page .services::after {
+    background-image: none;
+    background-color: rgba(20, 35, 25, 0.02);
+  }
+
   .services__header {
     margin-bottom: 4rem;
   }
@@ -7458,4 +7472,5 @@ section:not(.hero):not(.entrance-animation)::before {
   opacity: 0.2;
   transform: translate(-50%, -50%) scale(1.2);
 }
+
 
