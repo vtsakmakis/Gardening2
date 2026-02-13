@@ -1,0 +1,812 @@
+/* ============================================
+   WEATHER PAGE - Immersive Sky & Bento Layout
+   Unique design, not matching other pages
+   ============================================ */
+
+.weather-page.wp-immersive {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #0a0e14;
+  font-family: "Outfit", "Segoe UI", system-ui, sans-serif;
+}
+
+/* Safe area for notched phones (viewport-fit=cover) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .wp-footer {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Sky Canvas - Full viewport immersive background */
+.wp-sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.wp-sky__gradient {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(180deg, 
+      #0d1321 0%, 
+      #1a2332 25%, 
+      #2d3a4f 50%,
+      #3d4f6f 75%,
+      #5c7c99 90%,
+      #7eb8da 100%);
+  animation: wpSkyShift 20s ease-in-out infinite alternate;
+}
+
+@keyframes wpSkyShift {
+  0% { opacity: 1; filter: hue-rotate(-10deg); }
+  100% { opacity: 0.95; filter: hue-rotate(5deg); }
+}
+
+.wp-sky__stars {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(2px 2px at 60% 20%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(2px 2px at 80% 50%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(2px 2px at 10% 80%, rgba(255,255,255,0.3), transparent);
+  background-size: 200% 200%;
+  opacity: 0.6;
+  animation: wpStarsTwinkle 8s ease-in-out infinite;
+}
+
+@keyframes wpStarsTwinkle {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+.wp-sky__clouds {
+  position: absolute;
+  inset: 0;
+}
+
+.wp-sky__cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: wpCloudFloat 25s ease-in-out infinite;
+}
+
+.wp-sky__cloud--1 { width: 300px; height: 120px; top: 15%; left: 10%; animation-delay: 0s; }
+.wp-sky__cloud--2 { width: 200px; height: 80px; top: 35%; right: 20%; animation-delay: -8s; }
+.wp-sky__cloud--3 { width: 250px; height: 100px; bottom: 30%; left: 30%; animation-delay: -15s; }
+.wp-sky__cloud--4 { width: 180px; height: 70px; bottom: 15%; right: 15%; animation-delay: -5s; }
+
+@keyframes wpCloudFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -20px) scale(1.05); }
+  50% { transform: translate(-20px, 10px) scale(0.95); }
+  75% { transform: translate(20px, 20px) scale(1.02); }
+}
+
+.wp-sky__horizon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(10, 14, 20, 0.9) 0%, transparent 100%);
+}
+
+/* Main Content */
+.wp-main {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: 7rem clamp(1.5rem, 5vw, 3rem) 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Bento Grid */
+.wp-bento {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.wp-data {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  grid-template-areas:
+    "temp temp humidity wind"
+    "temp temp pressure updated"
+    "tip tip tip tip";
+}
+
+/* Header */
+.wp-header {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.wp-header__location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.wp-header__location svg {
+  color: rgba(126, 184, 218, 0.9);
+  flex-shrink: 0;
+}
+
+.wp-refresh {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wp-refresh:hover {
+  background: rgba(126, 184, 218, 0.3);
+  color: #fff;
+  transform: rotate(180deg);
+}
+
+/* Loading */
+.wp-loading {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  gap: 1.5rem;
+}
+
+.wp-loading__ring {
+  width: 64px;
+  height: 64px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(126, 184, 218, 0.8);
+  border-radius: 50%;
+  animation: wpSpin 1s linear infinite;
+}
+
+.wp-loading__text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+}
+
+@keyframes wpSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Tiles - Glass morphism */
+.wp-tile {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wp-tile:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Temperature Tile - Large circular */
+.wp-tile--temp {
+  grid-area: temp;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  padding: 2rem;
+}
+
+.wp-temp-ring {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+
+.wp-temp-ring__svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.wp-temp-ring__bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 8;
+}
+
+.wp-temp-ring__fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 327;
+  stroke-dashoffset: 327;
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wp-temp-ring__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.wp-temp-ring__value {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.wp-temp-ring__unit {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.25rem;
+}
+
+.wp-temp-ring__feels {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.5rem;
+}
+
+.wp-tile__condition {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.wp-tile__icon {
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+}
+
+.wp-tile__desc {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: capitalize;
+}
+
+/* Metric Tiles */
+.wp-tile--metric {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 100px;
+}
+
+.wp-tile__metric-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(126, 184, 218, 0.15);
+  border-radius: 14px;
+  color: rgba(126, 184, 218, 0.95);
+  flex-shrink: 0;
+}
+
+.wp-tile__metric-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.wp-tile__metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.wp-tile__metric-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.wp-tile--humidity { grid-area: humidity; }
+.wp-tile--wind { grid-area: wind; }
+.wp-tile--pressure { grid-area: pressure; }
+
+/* Updated tile - small */
+.wp-tile--updated {
+  grid-area: updated;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 60px;
+  padding: 1rem 1.5rem;
+}
+
+.wp-tile--updated svg {
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.wp-tile--updated span {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Gardening Tip - Wide */
+.wp-tile--tip {
+  grid-area: tip;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(107, 142, 107, 0.12) 0%, rgba(126, 184, 218, 0.08) 100%);
+  border-color: rgba(107, 142, 107, 0.2);
+}
+
+.wp-tip__icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(107, 142, 107, 0.25);
+  border-radius: 14px;
+  color: rgba(143, 179, 143, 0.95);
+  flex-shrink: 0;
+}
+
+.wp-tip__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.wp-tip__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.02em;
+}
+
+.wp-tip__text {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+/* Error */
+.wp-error {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.wp-error svg {
+  color: rgba(255, 150, 100, 0.6);
+}
+
+.wp-error p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  max-width: 400px;
+  margin: 0;
+}
+
+/* CTA */
+.wp-cta {
+  margin-top: 3rem;
+}
+
+.wp-cta__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.wp-cta__link:hover {
+  background: rgba(126, 184, 218, 0.25);
+  border-color: rgba(126, 184, 218, 0.5);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.wp-cta__link svg {
+  transition: transform 0.3s ease;
+}
+
+.wp-cta__link:hover svg {
+  transform: translateX(4px);
+}
+
+/* Footer - Minimal */
+.wp-footer {
+  margin-top: auto;
+  padding-top: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  width: 100%;
+}
+
+.wp-footer__logo {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.wp-footer__logo:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.wp-footer__nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.wp-footer__nav a {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.wp-footer__nav a:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Navbar override for weather page */
+.weather-page .navbar {
+  background: rgba(10, 14, 20, 0.6);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.weather-page .navbar__logo,
+.weather-page .navbar__link {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.weather-page .navbar__link:hover,
+.weather-page .navbar__link.active {
+  color: rgba(126, 184, 218, 0.95);
+}
+
+/* Responsive - Tablet */
+@media (max-width: 900px) {
+  .wp-data {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "temp temp"
+      "humidity wind"
+      "pressure updated"
+      "tip tip";
+  }
+
+  .wp-tile--temp {
+    min-height: 240px;
+  }
+
+  .wp-temp-ring {
+    width: 150px;
+    height: 150px;
+  }
+
+  .wp-temp-ring__value {
+    font-size: 2.75rem;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 600px) {
+  .wp-main {
+    padding: 6rem 1.25rem 3rem;
+  }
+
+  .wp-bento {
+    gap: 1rem;
+  }
+
+  .wp-data {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "temp"
+      "humidity"
+      "wind"
+      "pressure"
+      "updated"
+      "tip";
+    gap: 1rem;
+  }
+
+  .wp-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .wp-header__location {
+    font-size: 0.9rem;
+  }
+
+  .wp-tile--temp {
+    min-height: 220px;
+    padding: 1.5rem;
+  }
+
+  .wp-temp-ring {
+    width: 140px;
+    height: 140px;
+  }
+
+  .wp-temp-ring__value {
+    font-size: 2.5rem;
+  }
+
+  .wp-temp-ring__unit {
+    font-size: 1.25rem;
+  }
+
+  .wp-temp-ring__feels {
+    font-size: 0.75rem;
+  }
+
+  .wp-tile__icon {
+    font-size: 1.75rem;
+  }
+
+  .wp-tile__desc {
+    font-size: 0.9rem;
+  }
+
+  .wp-tile--metric {
+    min-height: 88px;
+    padding: 1.25rem;
+  }
+
+  .wp-tile__metric-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .wp-tile__metric-value {
+    font-size: 1.35rem;
+  }
+
+  .wp-tile__metric-label {
+    font-size: 0.75rem;
+  }
+
+  .wp-tile--updated {
+    min-height: 56px;
+    padding: 1rem 1.25rem;
+  }
+
+  .wp-tile--updated span {
+    font-size: 0.8rem;
+  }
+
+  .wp-tile--tip {
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .wp-tip__icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .wp-tip__title {
+    font-size: 0.95rem;
+  }
+
+  .wp-tip__text {
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .wp-cta {
+    margin-top: 2rem;
+  }
+
+  .wp-cta__link {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wp-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 2rem;
+    gap: 1rem;
+  }
+
+  .wp-footer__nav {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .wp-footer__nav a {
+    font-size: 0.85rem;
+  }
+
+  .wp-loading {
+    min-height: 260px;
+  }
+
+  .wp-error {
+    min-height: 240px;
+    padding: 1.5rem;
+  }
+
+  .wp-error p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Responsive - Small phones (320px–400px) */
+@media (max-width: 400px) {
+  .wp-main {
+    padding: 5.5rem 1rem 2rem;
+  }
+
+  .wp-bento {
+    gap: 0.875rem;
+  }
+
+  .wp-data {
+    gap: 0.875rem;
+  }
+
+  .wp-tile {
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .wp-tile--temp {
+    min-height: 200px;
+    padding: 1.25rem;
+  }
+
+  .wp-temp-ring {
+    width: 120px;
+    height: 120px;
+  }
+
+  .wp-temp-ring__value {
+    font-size: 2.25rem;
+  }
+
+  .wp-temp-ring__unit {
+    font-size: 1.1rem;
+  }
+
+  .wp-temp-ring__feels {
+    font-size: 0.7rem;
+  }
+
+  .wp-tile__condition {
+    margin-top: 1rem;
+    gap: 0.5rem;
+  }
+
+  .wp-tile__icon {
+    font-size: 1.5rem;
+  }
+
+  .wp-tile__desc {
+    font-size: 0.85rem;
+  }
+
+  .wp-tile--metric {
+    min-height: 80px;
+    padding: 1rem;
+  }
+
+  .wp-tile__metric-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .wp-tile__metric-value {
+    font-size: 1.25rem;
+  }
+
+  .wp-tile__metric-label {
+    font-size: 0.7rem;
+  }
+
+  .wp-tile--updated {
+    min-height: 52px;
+    padding: 0.875rem 1rem;
+  }
+
+  .wp-tile--tip {
+    padding: 1.25rem;
+    gap: 0.875rem;
+  }
+
+  .wp-tip__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .wp-tip__title {
+    font-size: 0.9rem;
+  }
+
+  .wp-tip__text {
+    font-size: 0.85rem;
+  }
+
+  .wp-refresh {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .wp-cta__link {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}
