@@ -1249,9 +1249,8 @@ body.site-revealed .services {
 .services__shape {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.35;
-  animation: shapeFloat 25s ease-in-out infinite;
+  filter: none;
+  opacity: 0.25;
 }
 
 .services__shape--1 {
@@ -1260,7 +1259,6 @@ body.site-revealed .services {
   top: -10%;
   left: -5%;
   background: radial-gradient(circle, rgba(107, 142, 107, 0.25) 0%, transparent 70%);
-  animation-delay: 0s;
 }
 
 .services__shape--2 {
@@ -1269,7 +1267,6 @@ body.site-revealed .services {
   top: 15%;
   right: -8%;
   background: radial-gradient(circle, rgba(143, 179, 143, 0.2) 0%, transparent 70%);
-  animation-delay: -5s;
 }
 
 .services__shape--3 {
@@ -1278,7 +1275,6 @@ body.site-revealed .services {
   bottom: 10%;
   left: -3%;
   background: radial-gradient(circle, rgba(74, 124, 89, 0.18) 0%, transparent 70%);
-  animation-delay: -10s;
 }
 
 .services__shape--4 {
@@ -1287,7 +1283,6 @@ body.site-revealed .services {
   bottom: -15%;
   right: 5%;
   background: radial-gradient(circle, rgba(107, 142, 107, 0.2) 0%, transparent 70%);
-  animation-delay: -15s;
 }
 
 .services__shape--5 {
@@ -1297,7 +1292,6 @@ body.site-revealed .services {
   left: 50%;
   transform: translate(-50%, -50%);
   background: radial-gradient(circle, rgba(159, 194, 159, 0.15) 0%, transparent 70%);
-  animation-delay: -8s;
 }
 
 .services__shape--6 {
@@ -1306,35 +1300,6 @@ body.site-revealed .services {
   top: 60%;
   right: 25%;
   background: radial-gradient(circle, rgba(90, 138, 90, 0.18) 0%, transparent 70%);
-  animation-delay: -12s;
-}
-
-@keyframes shapeFloat {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  25% {
-    transform: translate(15px, -20px) scale(1.05);
-  }
-  50% {
-    transform: translate(-10px, 15px) scale(0.98);
-  }
-  75% {
-    transform: translate(20px, 10px) scale(1.02);
-  }
-}
-
-.services__shape--5 {
-  animation-name: shapeFloatCenter;
-}
-
-@keyframes shapeFloatCenter {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.08);
-  }
 }
 
 /* Organic Leaf Decorative Elements */
@@ -1353,7 +1318,6 @@ body.site-revealed .services {
   position: absolute;
   opacity: 0.08;
   color: rgba(107, 142, 107, 0.3);
-  animation: float 20s infinite ease-in-out;
 }
 
 .services__leaf svg {
@@ -1366,7 +1330,6 @@ body.site-revealed .services {
   left: 5%;
   width: 80px;
   height: 80px;
-  animation-delay: 0s;
 }
 
 .services__leaf:nth-child(2) {
@@ -1374,7 +1337,6 @@ body.site-revealed .services {
   right: 10%;
   width: 60px;
   height: 60px;
-  animation-delay: 3s;
 }
 
 .services__leaf:nth-child(3) {
@@ -1382,7 +1344,6 @@ body.site-revealed .services {
   left: 15%;
   width: 100px;
   height: 100px;
-  animation-delay: 6s;
 }
 
 .services__leaf:nth-child(4) {
@@ -1390,22 +1351,6 @@ body.site-revealed .services {
   right: 5%;
   width: 70px;
   height: 70px;
-  animation-delay: 9s;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-20px) rotate(5deg);
-  }
-  50% {
-    transform: translateY(-10px) rotate(-5deg);
-  }
-  75% {
-    transform: translateY(-15px) rotate(3deg);
-  }
 }
 
 .services__container {
@@ -1646,6 +1591,7 @@ body.site-revealed .services {
     contain: none;
   }
 }
+
 
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
@@ -4379,8 +4325,7 @@ body.site-revealed .weather-widget-section {
   }
 
   .services__shape {
-    filter: blur(45px);
-    opacity: 0.28;
+    opacity: 0.2;
   }
 
   .services__header {
